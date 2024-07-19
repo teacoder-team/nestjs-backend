@@ -7,8 +7,11 @@ import { PrismaService } from 'src/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
+import { DiscordStrategy } from './strategies/discord.strategy'
+import { GithubStrategy } from './strategies/github.strategy'
 import { GoogleStrategy } from './strategies/google.strategy'
 import { JwtStrategy } from './strategies/jwt.strategy'
+import { YandexStrategy } from './strategies/yandex.strategy'
 
 @Module({
 	controllers: [AuthController],
@@ -18,7 +21,10 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 		UserService,
 		EmailService,
 		JwtStrategy,
-		GoogleStrategy
+		GoogleStrategy,
+		GithubStrategy,
+		YandexStrategy,
+		DiscordStrategy
 	],
 	imports: [
 		ConfigModule,

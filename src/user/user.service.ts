@@ -48,7 +48,7 @@ export class UserService {
 					create: {
 						name: user.name,
 						picture: user.picture,
-						points: 0
+						provider: user.type
 					}
 				}
 			}

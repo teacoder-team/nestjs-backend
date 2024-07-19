@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { AuthProvider } from '@prisma/client'
-import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20'
+import { Profile, Strategy } from 'passport-github2'
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 	constructor(private readonly configService: ConfigService) {
 		super({
-			clientID: configService.get('GOOGLE_CLIENT_ID'),
-			clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
-			callbackURL: configService.get('APP_URL') + '/auth/google/callback',
-			scope: ['email', 'profile']
+			clientID: configService.get('GITHUB_CLIENT_ID'),
+			clientSecret: configService.get('GITHUB_CLIENT_SECRET'),
+			callbackURL: configService.get('APP_URL') + '/auth/github/callback',
+			scope: ['user:email']
 		})
 	}
 
@@ -19,7 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 		accessToken: string,
 		refreshToken: string,
 		profile: Profile,
-		done: VerifyCallback
+		done: any
 	) {
 		const { displayName, emails, photos } = profile
 
@@ -27,7 +27,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 			email: emails[0].value,
 			name: displayName,
 			picture: photos[0].value,
-			type: AuthProvider.GOOGLE
+			type: AuthProvider.GITHUB
 		}
 
 		done(null, user)

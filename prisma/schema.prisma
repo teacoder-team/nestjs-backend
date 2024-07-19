@@ -29,7 +29,8 @@ model Profile {
   name    String
   picture String @default("/uploads/users/default-avatar.png")
 
-  points Int @default(0)
+  points   Int          @default(0)
+  provider AuthProvider
 
   logCourses LogCourse[]
 
@@ -112,4 +113,12 @@ enum UserRole {
   STUDENT
   MODERATOR
   ADMIN
+}
+
+// Провайдеры для авторизации
+enum AuthProvider {
+  GOOGLE
+  GITHUB
+  YANDEX
+  DISCORD
 }

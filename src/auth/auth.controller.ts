@@ -10,7 +10,12 @@ import {
 } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
-import { GoogleAuthGuard } from './guards/google-auth.guard'
+import {
+	DiscordAuthGuard,
+	GithubAuthGuard,
+	GoogleAuthGuard,
+	YandexAuthGuard
+} from './guards/social-auth.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +40,99 @@ export class AuthController {
 	@Get('google/callback')
 	@UseGuards(GoogleAuthGuard)
 	async googleAuthCallback(
+		@Req() req,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const { refreshToken, ...response } = await this.authService.validateUser(
+			req.user
+		)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return response
+	}
+
+	/**
+	 * Обрабатывает запрос на аутентификацию через Github.
+	 * Использует GithubAuthGuard для проверки аутентификации пользователя.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 */
+	@Get('github')
+	@UseGuards(GithubAuthGuard)
+	async githubAuth(@Req() req) {}
+
+	/**
+	 * Обрабатывает обратный вызов после аутентификации через Github.
+	 * Проверяет пользователя и добавляет refresh token в ответ.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
+	 * @returns Объект с информацией о пользователе, включая access token
+	 */
+	@Get('github/callback')
+	@UseGuards(GithubAuthGuard)
+	async githubAuthCallback(
+		@Req() req,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const { refreshToken, ...response } = await this.authService.validateUser(
+			req.user
+		)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return response
+	}
+
+	/**
+	 * Обрабатывает запрос на аутентификацию через Yandex.
+	 * Использует YandexAuthGuard для проверки аутентификации пользователя.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 */
+	@Get('yandex')
+	@UseGuards(YandexAuthGuard)
+	async yandexAuth(@Req() req) {}
+
+	/**
+	 * Обрабатывает обратный вызов после аутентификации через Yandex.
+	 * Проверяет пользователя и добавляет refresh token в ответ.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
+	 * @returns Объект с информацией о пользователе, включая access token
+	 */
+	@Get('yandex/callback')
+	@UseGuards(YandexAuthGuard)
+	async yandexAuthCallback(
+		@Req() req,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const { refreshToken, ...response } = await this.authService.validateUser(
+			req.user
+		)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return response
+	}
+
+	/**
+	 * Обрабатывает запрос на аутентификацию через Discord.
+	 * Использует DiscordAuthGuard для проверки аутентификации пользователя.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 */
+	@Get('discord')
+	@UseGuards(DiscordAuthGuard)
+	async discordAuth(@Req() req) {}
+
+	/**
+	 * Обрабатывает обратный вызов после аутентификации через Discord.
+	 * Проверяет пользователя и добавляет refresh token в ответ.
+	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
+	 * @returns Объект с информацией о пользователе, включая access token
+	 */
+	@Get('discord/callback')
+	@UseGuards(DiscordAuthGuard)
+	async discordAuthCallback(
 		@Req() req,
 		@Res({ passthrough: true }) res: Response
 	) {
