@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { AuthModule } from './auth/auth.module'
+import { UserModule } from './user/user.module'
 
 @Module({
 	imports: [
@@ -7,7 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 			ignoreEnvFile: process.env['NODE_ENV'] === 'production',
 			isGlobal: true
 		}),
+		AuthModule,
+		UserModule
 	]
 })
-
 export class AppModule {}
