@@ -5,9 +5,10 @@ import {
 	Post,
 	Req,
 	Res,
+	UnauthorizedException,
 	UseGuards
 } from '@nestjs/common'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import { GoogleAuthGuard } from './guards/google-auth.guard'
 
@@ -39,6 +40,37 @@ export class AuthController {
 	) {
 		const { refreshToken, ...response } = await this.authService.validateUser(
 			req.user
+		)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return response
+	}
+
+	/**
+	 * Получает новые access и refresh токены на основе refresh токена из cookies.
+	 * Если токен валиден, генерирует новые токены и добавляет refresh токен в ответ.
+	 * @param req - Объект запроса.
+	 * @param res - Объект ответа Express.
+	 * @returns Объект с новыми токенами.
+	 * @throws UnauthorizedException - Если refresh токен отсутствует или недействителен.
+	 */
+	@HttpCode(200)
+	@Post('login/access-token')
+	async getNewTokens(
+		@Req() req: Request,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const refreshTokenFromCookies =
+			req.cookies[this.authService.REFRESH_TOKEN_NAME]
+
+		if (!refreshTokenFromCookies) {
+			this.authService.removeRefreshTokenFromResponse(res)
+			throw new UnauthorizedException('Refresh токен не прошёл')
+		}
+
+		const { refreshToken, ...response } = await this.authService.getNewTokens(
+			refreshTokenFromCookies
 		)
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)

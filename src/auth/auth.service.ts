@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { UserRole } from '@prisma/client'
 import { Response } from 'express'
+import { EmailService } from 'src/email/email.service'
 import { UserService } from 'src/user/user.service'
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AuthService {
 	constructor(
 		private readonly jwt: JwtService,
 		private readonly userService: UserService,
+		private readonly emailService: EmailService,
 		private readonly configService: ConfigService
 	) {}
 
@@ -27,10 +29,29 @@ export class AuthService {
 		if (!existingUser) {
 			const newUser = await this.userService.create(user)
 
+			// await this.emailService.sendWelcome(newUser.email)
+
 			return this.issueTokens(newUser.id, newUser.role)
 		}
 
 		return this.issueTokens(existingUser.id, existingUser.role)
+	}
+
+	/**
+	 * Получает новые токены на основе refresh токена.
+	 * Проверяет действительность токена и генерирует новые токены, если он действителен.
+	 * @param refreshToken - Refresh токен для проверки.
+	 * @returns Объект с новыми токенами.
+	 * @throws UnauthorizedException - Если токен недействителен.
+	 */
+	async getNewTokens(refreshToken: string) {
+		const result = await this.jwt.verifyAsync(refreshToken)
+
+		if (!result) throw new UnauthorizedException('Невалидный токен')
+
+		const user = await this.userService.findById(result.id)
+
+		return this.issueTokens(user.id, user.role)
 	}
 
 	/**

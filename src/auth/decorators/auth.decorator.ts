@@ -4,7 +4,7 @@ import { OnlyAdminGuard } from '../guards/admin.guard'
 import { JwtAuthGuard } from '../guards/jwt-auth.guard'
 import { OnlyModeratorGuard } from '../guards/moderator.guard'
 
-export const Auth = (role: UserRole) =>
+export const Auth = (role: UserRole = 'STUDENT') =>
 	applyDecorators(
 		role === UserRole.ADMIN
 			? UseGuards(JwtAuthGuard, OnlyAdminGuard)
