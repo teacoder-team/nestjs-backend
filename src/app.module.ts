@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module'
+import { CourseModule } from './course/course.module'
 import { EmailModule } from './email/email.module'
 import { UserModule } from './user/user.module'
 import { IS_DEV_ENV } from './utils/is-dev.util'
@@ -13,7 +14,8 @@ import { IS_DEV_ENV } from './utils/is-dev.util'
 		}),
 		AuthModule,
 		UserModule,
-		EmailModule
+		EmailModule,
+		CourseModule
 	]
 })
 export class AppModule {}

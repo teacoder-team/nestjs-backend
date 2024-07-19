@@ -13,7 +13,10 @@ export class UserService {
 	 */
 	async findById(id: number) {
 		const user = await this.prisma.user.findUnique({
-			where: { id }
+			where: { id },
+			include: {
+				profile: true
+			}
 		})
 
 		if (!user) throw new NotFoundException('Пользователь не найден')
@@ -41,7 +44,7 @@ export class UserService {
 		return this.prisma.user.create({
 			data: {
 				email: user.email,
-				profiles: {
+				profile: {
 					create: {
 						name: user.name,
 						picture: user.picture,
