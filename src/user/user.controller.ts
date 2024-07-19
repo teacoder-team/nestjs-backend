@@ -7,6 +7,11 @@ import { UserService } from './user.service'
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
+	/**
+	 * Получает профиль текущего пользователя.
+	 * @param id - Уникальный идентификатор текущего пользователя, полученный из токена
+	 * @returns Объект профиля пользователя
+	 */
 	@Auth()
 	@Get('profile')
 	async getById(@CurrentUser('id') id: number) {

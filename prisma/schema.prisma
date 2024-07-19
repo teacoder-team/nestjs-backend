@@ -7,18 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Таблица для пользователей
 model User {
   id Int @id @default(autoincrement())
 
-  email    String  @unique
-  password String?
+  email String   @unique
+  role  UserRole @default(STUDENT)
 
-  name    String
-  picture String @default("/uploads/users/default-avatar.png")
-
-  role UserRole @default(STUDENT)
-
-  points Int @default(0)
+  profiles Profile[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -26,6 +22,92 @@ model User {
   @@map("user")
 }
 
+// Таблица для профилей пользователей
+model Profile {
+  id Int @id @default(autoincrement())
+
+  name    String
+  picture String @default("/uploads/users/default-avatar.png")
+
+  points Int @default(0)
+
+  logCourses LogCourse[]
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("profile")
+}
+
+// Таблица для курсов
+model Course {
+  id Int @id @default(autoincrement())
+
+  name        String
+  slug        String  @unique
+  description String?
+
+  imageUrl      String? @map("image_url")
+  videoUrl      String? @map("video_url")
+  repositoryUrl String? @map("repository_url")
+
+  isPublished Boolean @default(false) @map("is_published")
+  views       Int     @default(0)
+
+  chapters Chapter[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("course")
+}
+
+// Таблица с главами для курсов
+model Chapter {
+  id Int @id @default(autoincrement())
+
+  name        String
+  slug        String  @unique
+  description String?
+  videoUrl    String? @map("vider_url")
+
+  isPublished Boolean @default(false) @map("is_published")
+
+  logCourses LogCourse[]
+
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId Int?    @map("course_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([courseId])
+  @@map("chapter")
+}
+
+// Таблица с прогрессом пользователей
+model LogCourse {
+  id Int @id @default(autoincrement())
+
+  isCompleted Boolean @map("is_completed")
+
+  chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId Int?     @map("chapter_id")
+
+  user   Profile? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int?     @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, chapterId])
+  @@map("log_course")
+}
+
+// Роли для пользователей
 enum UserRole {
   STUDENT
   MODERATOR
