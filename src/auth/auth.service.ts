@@ -29,7 +29,7 @@ export class AuthService {
 		if (!existingUser) {
 			const newUser = await this.userService.create(user)
 
-			// await this.emailService.sendWelcome(newUser.email)
+			await this.emailService.sendWelcome(newUser.email)
 
 			return this.issueTokens(newUser.id, newUser.role)
 		}
