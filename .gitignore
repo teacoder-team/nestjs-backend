@@ -42,5 +42,4 @@ lerna-debug.log*
 .env.local
 
 # development files and folders
-/uploads
 todo.txt

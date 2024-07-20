@@ -51,6 +51,9 @@ export class UserService {
 						provider: user.type
 					}
 				}
+			},
+			include: {
+				profile: true
 			}
 		})
 	}

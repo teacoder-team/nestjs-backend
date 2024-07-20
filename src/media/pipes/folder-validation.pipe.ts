@@ -5,7 +5,7 @@ import {
 	PipeTransform
 } from '@nestjs/common'
 
-const allowedFolders = ['default', 'users', 'courses', 'repositories']
+const allowedFolders = ['default', 'users', 'courses', 'repositories', 'email']
 
 /**
  * Пайп для проверки валидности имени папки для загрузки файлов.
