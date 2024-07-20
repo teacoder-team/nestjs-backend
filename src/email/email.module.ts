@@ -5,7 +5,6 @@ import { getMailerConfig } from 'src/config/mailer.config'
 import { EmailService } from './email.service'
 
 @Module({
-	providers: [EmailService],
 	imports: [
 		MailerModule.forRootAsync({
 			imports: [ConfigModule],
@@ -13,6 +12,7 @@ import { EmailService } from './email.service'
 			inject: [ConfigService]
 		})
 	],
+	providers: [EmailService],
 	exports: [EmailService]
 })
 export class EmailModule {}

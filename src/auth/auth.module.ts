@@ -14,6 +14,14 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 import { YandexStrategy } from './strategies/yandex.strategy'
 
 @Module({
+	imports: [
+		ConfigModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			useFactory: getJwtConfig,
+			inject: [ConfigService]
+		})
+	],
 	controllers: [AuthController],
 	providers: [
 		AuthService,
@@ -25,14 +33,6 @@ import { YandexStrategy } from './strategies/yandex.strategy'
 		GithubStrategy,
 		YandexStrategy,
 		DiscordStrategy
-	],
-	imports: [
-		ConfigModule,
-		JwtModule.registerAsync({
-			imports: [ConfigModule],
-			useFactory: getJwtConfig,
-			inject: [ConfigService]
-		})
 	]
 })
 export class AuthModule {}
