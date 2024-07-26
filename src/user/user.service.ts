@@ -6,6 +6,24 @@ export class UserService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	/**
+	 * Получает список всех пользователей из базы данных.
+	 * Пользователи сортируются по дате создания в обратном порядке.
+	 * @returns Массив объектов пользователей, включая данные профиля.
+	 */
+	async findList() {
+		const users = await this.prisma.user.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			},
+			include: {
+				profile: true
+			}
+		})
+
+		return users
+	}
+
+	/**
 	 * Находит пользователя по его уникальному идентификатору (id).
 	 * @param id - Уникальный идентификатор пользователя
 	 * @returns Объект пользователя

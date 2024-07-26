@@ -49,7 +49,9 @@ export class AuthController {
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)
 
-		return response
+		return res.redirect(
+			`${process.env['APP_ORIGIN']}/dashboard?accessToken=${response.accessToken}`
+		)
 	}
 
 	/**
@@ -80,7 +82,9 @@ export class AuthController {
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)
 
-		return response
+		return res.redirect(
+			`${process.env['APP_ORIGIN']}/dashboard?accessToken=${response.accessToken}`
+		)
 	}
 
 	/**
@@ -111,7 +115,9 @@ export class AuthController {
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)
 
-		return response
+		return res.redirect(
+			`${process.env['APP_ORIGIN']}/dashboard?accessToken=${response.accessToken}`
+		)
 	}
 
 	/**
@@ -142,7 +148,9 @@ export class AuthController {
 
 		this.authService.addRefreshTokenToResponse(res, refreshToken)
 
-		return response
+		return res.redirect(
+			`${process.env['APP_ORIGIN']}/dashboard?accessToken=${response.accessToken}`
+		)
 	}
 
 	/**

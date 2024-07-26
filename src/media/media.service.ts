@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { path } from 'app-root-path'
 import { ensureDir, writeFile } from 'fs-extra'
+import { v4 as uuidv4 } from 'uuid'
 import { cleanFileName } from './clean-name'
 import { IFile, IMediaResponse } from './media.interface'
 
@@ -27,7 +28,10 @@ export class MediaService {
 			let fileName = file?.originalname || file?.name
 			fileName = cleanFileName(fileName)
 
-			await writeFile(`${uploadFolder}/${fileName}`, file.buffer)
+			const uniqueSuffix = uuidv4().split('-')[0]
+			const uniqueFileName = `${uniqueSuffix}-${fileName}`
+
+			await writeFile(`${uploadFolder}/${uniqueFileName}`, file.buffer)
 
 			responses.push({
 				url: `/uploads/${folderLowerCase}/${fileName}`,

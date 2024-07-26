@@ -33,30 +33,6 @@ export class CourseService {
 	}
 
 	/**
-	 * Создает фильтр для поиска курсов по строке поиска.
-	 * @param searchTerm - Строка поиска, которую нужно использовать для фильтрации.
-	 * @returns Фильтр для поиска курсов по названию или описанию.
-	 */
-	private findSearchTermFilter(searchTerm: string): Prisma.CourseWhereInput {
-		return {
-			OR: [
-				{
-					name: {
-						contains: searchTerm,
-						mode: 'insensitive'
-					}
-				},
-				{
-					description: {
-						contains: searchTerm,
-						mode: 'insensitive'
-					}
-				}
-			]
-		}
-	}
-
-	/**
 	 * Находит курс по уникальному slug.
 	 * @param slug - Уникальнас ссылка курса, по которому нужно выполнить поиск.
 	 * @returns Объект курса с указанным slug.
@@ -64,7 +40,7 @@ export class CourseService {
 	 */
 	async findBySlug(slug: string) {
 		const course = await this.prisma.course.findUnique({
-			where: { slug },
+			where: { slug, isPublished: true },
 			include: {
 				chapters: true
 			}
@@ -147,5 +123,29 @@ export class CourseService {
 		})
 
 		return { id: course.id }
+	}
+
+	/**
+	 * Создает фильтр для поиска курсов по строке поиска.
+	 * @param searchTerm - Строка поиска, которую нужно использовать для фильтрации.
+	 * @returns Фильтр для поиска курсов по названию или описанию.
+	 */
+	private findSearchTermFilter(searchTerm: string): Prisma.CourseWhereInput {
+		return {
+			OR: [
+				{
+					name: {
+						contains: searchTerm,
+						mode: 'insensitive'
+					}
+				},
+				{
+					description: {
+						contains: searchTerm,
+						mode: 'insensitive'
+					}
+				}
+			]
+		}
 	}
 }

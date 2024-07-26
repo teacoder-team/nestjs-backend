@@ -6,6 +6,7 @@ import { EmailModule } from './email/email.module'
 import { MediaModule } from './media/media.module'
 import { UserModule } from './user/user.module'
 import { IS_DEV_ENV } from './utils/is-dev.util'
+import { ChapterModule } from './chapter/chapter.module';
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { IS_DEV_ENV } from './utils/is-dev.util'
 		UserModule,
 		EmailModule,
 		CourseModule,
-		MediaModule
+		MediaModule,
+		ChapterModule
 	]
 })
 export class AppModule {}
