@@ -11,7 +11,8 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import { ApiConsumes, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
-import { IFile } from './media.interface'
+import { MediaEntity } from './entities/media.entity'
+import { IFile } from './interfaces/media.interface'
 import { MediaService } from './media.service'
 import { FileValidationPipe } from './pipes/file-validation.pipe'
 import { FolderValidationPipe } from './pipes/folder-validation.pipe'
@@ -21,13 +22,6 @@ import { FolderValidationPipe } from './pipes/folder-validation.pipe'
 export class MediaController {
 	constructor(private readonly mediaService: MediaService) {}
 
-	/**
-	 * Загружает медиафайлы в указанную папку.
-	 * Применяет пайпы для проверки валидности папки и файлов.
-	 * @param mediaFiles - Один или несколько медиафайлов для загрузки.
-	 * @param folder - Папка для сохранения файлов (опционально).
-	 * @returns Массив объектов с информацией о сохраненных файлах.
-	 */
 	@ApiConsumes('multipart/form-data')
 	@ApiQuery({
 		name: 'folder',
@@ -35,7 +29,8 @@ export class MediaController {
 		description: 'Folder to save the files'
 	})
 	@ApiOkResponse({
-		description: 'Successful response with information about the saved files'
+		description: 'Successful response with information about the saved files',
+		type: [MediaEntity]
 	})
 	@UsePipes(new FolderValidationPipe())
 	@UseInterceptors(FilesInterceptor('media'))

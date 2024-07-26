@@ -13,7 +13,7 @@ async function bootstrap() {
 		.setDescription(
 			'This project is a backend for the Teacoder educational platform focused on teaching web development. It is developed using modern technologies to ensure high performance, scalability, and ease of use.'
 		)
-		.setVersion('0.1.11')
+		.setVersion('0.1.13')
 		.setContact('TeaCoder Team', 'https://teacoder.ru', 'help@teacoder.ru')
 		.addBearerAuth()
 		.build()

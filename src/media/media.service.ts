@@ -3,7 +3,7 @@ import { path } from 'app-root-path'
 import { ensureDir, writeFile } from 'fs-extra'
 import { v4 as uuidv4 } from 'uuid'
 import { cleanFileName } from './clean-name'
-import { IFile, IMediaResponse } from './media.interface'
+import { IFile, IMediaResponse } from './interfaces/media.interface'
 
 @Injectable()
 export class MediaService {

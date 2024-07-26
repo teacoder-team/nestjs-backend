@@ -70,7 +70,7 @@ model Chapter {
   name        String
   slug        String
   description String?
-  videoUrl    String? @map("video_url")
+  videoId     String? @map("video_id")
 
   position    Int     @default(0)
   isPublished Boolean @default(false) @map("is_published")

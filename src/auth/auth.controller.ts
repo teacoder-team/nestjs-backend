@@ -8,6 +8,12 @@ import {
 	UnauthorizedException,
 	UseGuards
 } from '@nestjs/common'
+import {
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+	ApiUnauthorizedResponse
+} from '@nestjs/swagger'
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import {
@@ -17,6 +23,7 @@ import {
 	YandexAuthGuard
 } from './guards/social-auth.guard'
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
@@ -26,6 +33,10 @@ export class AuthController {
 	 * Использует GoogleAuthGuard для проверки аутентификации пользователя.
 	 * @param req - Объект запроса, содержащий информацию о пользователе
 	 */
+	@ApiOperation({ summary: 'Google authentication' })
+	@ApiOkResponse({
+		description: 'Successful response after Google authentication.'
+	})
 	@Get('google')
 	@UseGuards(GoogleAuthGuard)
 	async googleAuth(@Req() req) {}
@@ -37,6 +48,15 @@ export class AuthController {
 	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
 	 * @returns Объект с информацией о пользователе, включая access token
 	 */
+	@ApiOperation({ summary: 'Google authentication callback' })
+	@ApiOkResponse({
+		description:
+			'Successful response containing user information and access token after Google authentication.'
+	})
+	@ApiUnauthorizedResponse({
+		description:
+			'Unauthorized access. This endpoint requires Google authentication.'
+	})
 	@Get('google/callback')
 	@UseGuards(GoogleAuthGuard)
 	async googleAuthCallback(
@@ -59,6 +79,10 @@ export class AuthController {
 	 * Использует GithubAuthGuard для проверки аутентификации пользователя.
 	 * @param req - Объект запроса, содержащий информацию о пользователе
 	 */
+	@ApiOperation({ summary: 'Github authentication' })
+	@ApiOkResponse({
+		description: 'Successful response after Github authentication.'
+	})
 	@Get('github')
 	@UseGuards(GithubAuthGuard)
 	async githubAuth(@Req() req) {}
@@ -70,6 +94,15 @@ export class AuthController {
 	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
 	 * @returns Объект с информацией о пользователе, включая access token
 	 */
+	@ApiOperation({ summary: 'Github authentication callback' })
+	@ApiOkResponse({
+		description:
+			'Successful response containing user information and access token after Github authentication.'
+	})
+	@ApiUnauthorizedResponse({
+		description:
+			'Unauthorized access. This endpoint requires Github authentication.'
+	})
 	@Get('github/callback')
 	@UseGuards(GithubAuthGuard)
 	async githubAuthCallback(
@@ -92,6 +125,10 @@ export class AuthController {
 	 * Использует YandexAuthGuard для проверки аутентификации пользователя.
 	 * @param req - Объект запроса, содержащий информацию о пользователе
 	 */
+	@ApiOperation({ summary: 'Yandex authentication' })
+	@ApiOkResponse({
+		description: 'Successful response after Yandex authentication.'
+	})
 	@Get('yandex')
 	@UseGuards(YandexAuthGuard)
 	async yandexAuth(@Req() req) {}
@@ -103,6 +140,15 @@ export class AuthController {
 	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
 	 * @returns Объект с информацией о пользователе, включая access token
 	 */
+	@ApiOperation({ summary: 'Yandex authentication callback' })
+	@ApiOkResponse({
+		description:
+			'Successful response containing user information and access token after Yandex authentication.'
+	})
+	@ApiUnauthorizedResponse({
+		description:
+			'Unauthorized access. This endpoint requires Yandex authentication.'
+	})
 	@Get('yandex/callback')
 	@UseGuards(YandexAuthGuard)
 	async yandexAuthCallback(
@@ -125,6 +171,10 @@ export class AuthController {
 	 * Использует DiscordAuthGuard для проверки аутентификации пользователя.
 	 * @param req - Объект запроса, содержащий информацию о пользователе
 	 */
+	@ApiOperation({ summary: 'Discord authentication' })
+	@ApiOkResponse({
+		description: 'Successful response after Discord authentication.'
+	})
 	@Get('discord')
 	@UseGuards(DiscordAuthGuard)
 	async discordAuth(@Req() req) {}
@@ -136,6 +186,15 @@ export class AuthController {
 	 * @param res - Объект ответа Express, используемый для отправки ответа клиенту
 	 * @returns Объект с информацией о пользователе, включая access token
 	 */
+	@ApiOperation({ summary: 'Discord authentication callback' })
+	@ApiOkResponse({
+		description:
+			'Successful response containing user information and access token after Discord authentication.'
+	})
+	@ApiUnauthorizedResponse({
+		description:
+			'Unauthorized access. This endpoint requires Discord authentication.'
+	})
 	@Get('discord/callback')
 	@UseGuards(DiscordAuthGuard)
 	async discordAuthCallback(
@@ -161,6 +220,10 @@ export class AuthController {
 	 * @returns Объект с новыми токенами.
 	 * @throws UnauthorizedException - Если refresh токен отсутствует или недействителен.
 	 */
+	@ApiOperation({ summary: 'Get new tokens' })
+	@ApiOkResponse({
+		description: 'Successful response containing new access and refresh tokens.'
+	})
 	@HttpCode(200)
 	@Post('login/access-token')
 	async getNewTokens(
@@ -190,6 +253,10 @@ export class AuthController {
 	 * @param res - Объект ответа Express
 	 * @returns true - Успешный ответ о выходе из системы
 	 */
+	@ApiOperation({ summary: 'Logout' })
+	@ApiOkResponse({
+		description: 'Successful response after logout.'
+	})
 	@HttpCode(200)
 	@Post('logout')
 	async logout(@Res({ passthrough: true }) res: Response) {

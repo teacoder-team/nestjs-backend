@@ -1,14 +1,15 @@
 import { Controller, Get } from '@nestjs/common'
 import {
+	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
-	ApiParam,
 	ApiTags,
 	ApiUnauthorizedResponse
 } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
+import { UserEntity } from './entities/user.entitiy'
 import { UserService } from './user.service'
 
 @ApiTags('Users')
@@ -24,7 +25,8 @@ export class UserController {
 	@ApiOperation({ summary: 'Get all users' })
 	@ApiOkResponse({
 		description:
-			'Successful response containing a list of all users with their profile data.'
+			'Successful response containing a list of all users with their profile data.',
+		type: [UserEntity]
 	})
 	@ApiUnauthorizedResponse({
 		description: 'Unauthorized access. This endpoint requires ADMIN role.'
@@ -41,17 +43,16 @@ export class UserController {
 	 * @returns Объект профиля пользователя
 	 */
 	@ApiOperation({ summary: 'Get user profile' })
-	@ApiParam({
-		name: 'id',
-		required: true,
-		description: 'Unique identifier of the current user'
-	})
 	@ApiOkResponse({
 		description:
-			'Successful response containing the profile information of the authenticated user.'
+			'Successful response containing the profile information of the authenticated user.',
+		type: UserEntity
 	})
 	@ApiUnauthorizedResponse({
 		description: 'Unauthorized access. This endpoint requires authentication.'
+	})
+	@ApiNotFoundResponse({
+		description: 'User not found with the provided ID.'
 	})
 	@Auth()
 	@Get('profile')

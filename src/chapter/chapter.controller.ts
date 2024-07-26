@@ -8,11 +8,22 @@ import {
 	UsePipes,
 	ValidationPipe
 } from '@nestjs/common'
+import {
+	ApiBadRequestResponse,
+	ApiNotFoundResponse,
+	ApiOperation,
+	ApiParam,
+	ApiResponse,
+	ApiTags,
+	ApiUnauthorizedResponse
+} from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { ChapterService } from './chapter.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
+import { ChapterEntity } from './entities/chapter.entitiy'
 
+@ApiTags('Chapters')
 @Controller('chapters')
 export class ChapterController {
 	constructor(private readonly chapterService: ChapterService) {}
@@ -22,6 +33,15 @@ export class ChapterController {
 	 * @param id - Уникальный идентификатор главы.
 	 * @returns Объект главы с указанным идентификатором.
 	 */
+	@ApiOperation({ summary: 'Get chapter by ID' })
+	@ApiParam({ name: 'id' })
+	@ApiResponse({ status: 200, type: ChapterEntity })
+	@ApiNotFoundResponse({
+		description: 'Chapter not found with the provided ID.'
+	})
+	@ApiUnauthorizedResponse({
+		description: 'Unauthorized access. This endpoint requires ADMIN role.'
+	})
 	@Auth(UserRole.ADMIN)
 	@Get('by-id/:id')
 	async findById(@Param('id') id: string) {
@@ -34,6 +54,12 @@ export class ChapterController {
 	 * @param courseId - Уникальный идентификатор курса, к которому относится глава.
 	 * @returns Объект с идентификатором созданной главы.
 	 */
+	@ApiOperation({ summary: 'Create a new chapter' })
+	@ApiResponse({ status: 200, type: ChapterEntity })
+	@ApiBadRequestResponse({ description: 'Invalid chapter data provided.' })
+	@ApiUnauthorizedResponse({
+		description: 'Unauthorized access. This endpoint requires ADMIN role.'
+	})
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Auth(UserRole.ADMIN)
