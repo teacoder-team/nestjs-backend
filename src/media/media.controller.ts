@@ -8,6 +8,7 @@ import {
 	UsePipes
 } from '@nestjs/common'
 import { FilesInterceptor } from '@nestjs/platform-express'
+import { ApiConsumes, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { IFile } from './media.interface'
@@ -15,6 +16,7 @@ import { MediaService } from './media.service'
 import { FileValidationPipe } from './pipes/file-validation.pipe'
 import { FolderValidationPipe } from './pipes/folder-validation.pipe'
 
+@ApiTags('Media')
 @Controller('media')
 export class MediaController {
 	constructor(private readonly mediaService: MediaService) {}
@@ -26,6 +28,15 @@ export class MediaController {
 	 * @param folder - Папка для сохранения файлов (опционально).
 	 * @returns Массив объектов с информацией о сохраненных файлах.
 	 */
+	@ApiConsumes('multipart/form-data')
+	@ApiQuery({
+		name: 'folder',
+		required: false,
+		description: 'Folder to save the files'
+	})
+	@ApiOkResponse({
+		description: 'Successful response with information about the saved files'
+	})
 	@UsePipes(new FolderValidationPipe())
 	@UseInterceptors(FilesInterceptor('media'))
 	@HttpCode(200)

@@ -10,7 +10,12 @@ async function bootstrap() {
 	const configService = app.get(ConfigService)
 	const swaggerConfig = new DocumentBuilder()
 		.setTitle('TeaCoder API')
-		.setVersion('0.1.10-beta')
+		.setDescription(
+			'This project is a backend for the Teacoder educational platform focused on teaching web development. It is developed using modern technologies to ensure high performance, scalability, and ease of use.'
+		)
+		.setVersion('0.1.11')
+		.setContact('TeaCoder Team', 'https://teacoder.ru', 'help@teacoder.ru')
+		.addBearerAuth()
 		.build()
 
 	app.use(cookieParser())
