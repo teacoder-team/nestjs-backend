@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { UserRole } from '@prisma/client'
 import { Response } from 'express'
 import { EmailService } from 'src/email/email.service'
 import { UserService } from 'src/user/user.service'
@@ -31,10 +30,10 @@ export class AuthService {
 
 			await this.emailService.sendWelcome(newUser.email, newUser.profile.name)
 
-			return this.issueTokens(newUser.id, newUser.role)
+			return this.issueTokens(newUser.id)
 		}
 
-		return this.issueTokens(existingUser.id, existingUser.role)
+		return this.issueTokens(existingUser.id)
 	}
 
 	/**
@@ -51,7 +50,7 @@ export class AuthService {
 
 		const user = await this.userService.findById(result.id)
 
-		return this.issueTokens(user.id, user.role)
+		return this.issueTokens(user.id)
 	}
 
 	/**
@@ -60,8 +59,8 @@ export class AuthService {
 	 * @param role - Роль пользователя (необязательный параметр)
 	 * @returns Объект с accessToken и refreshToken
 	 */
-	private async issueTokens(userId: number, role?: UserRole) {
-		const data = { id: userId, role }
+	private async issueTokens(userId: number) {
+		const data = { id: userId }
 
 		const accessToken = this.jwt.sign(data, {
 			expiresIn: '1h'
