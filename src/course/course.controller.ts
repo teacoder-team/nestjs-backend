@@ -42,7 +42,7 @@ export class CourseController {
 	@ApiQuery({ name: 'searchTerm', required: false })
 	@ApiResponse({ status: 200, type: [CourseEntity] })
 	@Get()
-	async findAll(@Query('seacrhTerm') seacrhTerm?: string) {
+	async findAll(@Query('searchTerm') seacrhTerm?: string) {
 		return this.courseService.findList(seacrhTerm)
 	}
 

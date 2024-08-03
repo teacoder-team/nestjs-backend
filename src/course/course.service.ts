@@ -42,7 +42,10 @@ export class CourseService {
 		const course = await this.prisma.course.findUnique({
 			where: { slug, isPublished: true },
 			include: {
-				chapters: true
+				chapters: {
+					orderBy: { position: 'asc' },
+					where: { isPublished: true }
+				}
 			}
 		})
 
@@ -61,7 +64,11 @@ export class CourseService {
 		const course = await this.prisma.course.findUnique({
 			where: { id },
 			include: {
-				chapters: true
+				chapters: {
+					orderBy: {
+						position: 'asc'
+					}
+				}
 			}
 		})
 

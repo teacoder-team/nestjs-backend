@@ -28,6 +28,13 @@ export class CourseEntity {
 	description?: string | null
 
 	@ApiProperty({
+		example: ['feature1', 'feature2'],
+		description: 'List of features associated with the course.',
+		required: false
+	})
+	features?: string[] | null
+
+	@ApiProperty({
 		example: '/uploads/courses/course.jpg',
 		description: 'URL of the course image.',
 		required: false
@@ -60,7 +67,6 @@ export class CourseEntity {
 	@ApiProperty({
 		type: () => [ChapterEntity],
 		description: 'List of chapters associated with the course.',
-		isArray: true,
 		required: false
 	})
 	chapters?: ChapterEntity[]

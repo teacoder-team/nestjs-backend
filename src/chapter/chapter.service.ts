@@ -13,6 +13,35 @@ export class ChapterService {
 		private readonly courseService: CourseService
 	) {}
 
+	async findList() {
+		const chapters = await this.prisma.chapter.findMany({
+			where: { isPublished: true },
+			orderBy: { createdAt: 'desc' }
+		})
+
+		return chapters
+	}
+
+	async findBySlug(slug: string) {
+		const chapter = await this.prisma.chapter.findUnique({
+			where: { slug, isPublished: true },
+			include: {
+				course: {
+					include: {
+						chapters: {
+							where: { isPublished: true },
+							orderBy: { position: 'asc' }
+						}
+					}
+				}
+			}
+		})
+
+		if (!chapter) throw new NotFoundException('Глава не найдена')
+
+		return chapter
+	}
+
 	/**
 	 * Находит главу по её идентификатору.
 	 * @param id - Уникальный идентификатор главы.
@@ -40,9 +69,7 @@ export class ChapterService {
 
 		const lastChapter = await this.prisma.chapter.findFirst({
 			where: { courseId },
-			orderBy: {
-				position: 'desc'
-			}
+			orderBy: { position: 'desc' }
 		})
 
 		const newPosition = lastChapter ? lastChapter.position + 1 : 1

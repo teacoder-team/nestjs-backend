@@ -38,6 +38,21 @@ export class UserController {
 	}
 
 	/**
+	 * Получает 10 самых продуктивных пользователей по количеству очков (points).
+	 * @returns Массив объектов пользователей, включая данные профиля.
+	 */
+	@ApiOperation({ summary: 'Get top 10 users by points' })
+	@ApiOkResponse({
+		description:
+			'Successful response containing the top 10 users sorted by points.',
+		type: [UserEntity]
+	})
+	@Get('find-top')
+	async findTopUsers() {
+		return this.userService.findTopUsersByPoints()
+	}
+
+	/**
 	 * Получает профиль текущего пользователя.
 	 * @param id - Уникальный идентификатор текущего пользователя, полученный из токена
 	 * @returns Объект профиля пользователя

@@ -34,8 +34,8 @@ export class MediaService {
 			await writeFile(`${uploadFolder}/${uniqueFileName}`, file.buffer)
 
 			responses.push({
-				url: `/uploads/${folderLowerCase}/${fileName}`,
-				name: fileName
+				url: `/uploads/${folderLowerCase}/${uniqueFileName}`,
+				name: uniqueFileName
 			})
 		}
 

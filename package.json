@@ -1,6 +1,6 @@
 {
 	"name": "teacoder-back",
-	"version": "0.1.14",
+	"version": "0.1.16",
 	"description": "This project is a backend for the Teacoder educational platform focused on teaching web development. It is developed using modern technologies to ensure high performance, scalability, and ease of use.",
 	"author": "Vadim Nechaev",
 	"private": true,
@@ -38,6 +38,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.1",
 		"cookie-parser": "^1.4.6",
+		"dayjs": "^1.11.12",
 		"fs-extra": "^11.2.0",
 		"passport": "^0.7.0",
 		"passport-discord": "^0.1.4",

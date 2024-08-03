@@ -48,6 +48,8 @@ model Course {
   slug        String  @unique
   description String?
 
+  features String[] @default([])
+
   imageUrl      String? @map("image_url")
   videoUrl      String? @map("video_url")
   repositoryUrl String? @map("repository_url")
@@ -68,14 +70,14 @@ model Chapter {
   id Int @id @default(autoincrement())
 
   name        String
-  slug        String
+  slug        String  @unique
   description String?
   videoId     String? @map("video_id")
 
   position    Int     @default(0)
   isPublished Boolean @default(false) @map("is_published")
 
-  logCourses LogCourse[]
+  logsCourse LogCourse[]
 
   course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId Int?    @map("course_id")

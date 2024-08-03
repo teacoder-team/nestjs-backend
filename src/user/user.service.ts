@@ -24,6 +24,23 @@ export class UserService {
 	}
 
 	/**
+	 * Получает 10 самых продуктивных пользователей по количеству очков (points).
+	 * @returns Массив объектов пользователей, включая данные профиля.
+	 */
+	async findTopUsersByPoints() {
+		const topUsers = await this.prisma.user.findMany({
+			select: {
+				id: true,
+				profile: { select: { name: true, picture: true, points: true } }
+			},
+			orderBy: { profile: { points: 'desc' } },
+			take: 10
+		})
+
+		return topUsers
+	}
+
+	/**
 	 * Находит пользователя по его уникальному идентификатору (id).
 	 * @param id - Уникальный идентификатор пользователя
 	 * @returns Объект пользователя
