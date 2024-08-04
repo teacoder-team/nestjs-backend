@@ -22,7 +22,7 @@ export class ChapterService {
 		return chapters
 	}
 
-	async findBySlug(slug: string) {
+	async findBySlug(slug: string, userId: number) {
 		const chapter = await this.prisma.chapter.findUnique({
 			where: { slug, isPublished: true },
 			include: {
@@ -37,9 +37,23 @@ export class ChapterService {
 			}
 		})
 
+		// const userProgerss = await db.query.logCourses.findFirst({
+		// 	where: and(
+		// 		eq(logCourses.userId, userId),
+		// 		eq(logCourses.chapterId, chapter.id)
+		// 	)
+		// })
+
 		if (!chapter) throw new NotFoundException('Глава не найдена')
 
-		return chapter
+		const userProgress = await this.prisma.logCourse.findFirst({
+			where: {
+				userId,
+				chapterId: chapter.id
+			}
+		})
+
+		return { chapter, userProgress }
 	}
 
 	/**

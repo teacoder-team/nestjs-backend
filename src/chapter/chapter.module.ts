@@ -6,6 +6,7 @@ import { ChapterService } from './chapter.service'
 
 @Module({
 	controllers: [ChapterController],
-	providers: [ChapterService, PrismaService, CourseService]
+	providers: [ChapterService, PrismaService, CourseService],
+	exports: [ChapterService]
 })
 export class ChapterModule {}

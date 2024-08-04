@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { getJwtConfig } from 'src/config/jwt.config'
+import { CourseService } from 'src/course/course.service'
 import { EmailService } from 'src/email/email.service'
 import { PrismaService } from 'src/prisma.service'
 import { UserService } from 'src/user/user.service'
@@ -25,6 +26,7 @@ import { YandexStrategy } from './strategies/yandex.strategy'
 	controllers: [AuthController],
 	providers: [
 		AuthService,
+		CourseService,
 		PrismaService,
 		UserService,
 		EmailService,

@@ -5,6 +5,7 @@ import { CourseService } from './course.service'
 
 @Module({
 	controllers: [CourseController],
-	providers: [CourseService, PrismaService]
+	providers: [CourseService, PrismaService],
+	exports: [CourseService]
 })
 export class CourseModule {}

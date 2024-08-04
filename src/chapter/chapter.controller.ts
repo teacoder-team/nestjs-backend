@@ -21,6 +21,7 @@ import {
 } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { ChapterService } from './chapter.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
@@ -36,9 +37,13 @@ export class ChapterController {
 		return this.chapterService.findList()
 	}
 
+	@Auth()
 	@Get('by-slug/:slug')
-	async findBySlug(@Param('slug') slug: string) {
-		return this.chapterService.findBySlug(slug)
+	async findBySlug(
+		@Param('slug') slug: string,
+		@CurrentUser('id') userId: string
+	) {
+		return this.chapterService.findBySlug(slug, +userId)
 	}
 
 	/**

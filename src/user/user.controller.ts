@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
 import {
 	ApiNotFoundResponse,
 	ApiOkResponse,
@@ -73,5 +73,14 @@ export class UserController {
 	@Get('profile')
 	async findById(@CurrentUser('id') id: number) {
 		return this.userService.findById(id)
+	}
+
+	@Auth()
+	@Get('progress/:courseId')
+	async findProgress(
+		@CurrentUser('id') userId: string,
+		@Param('courseId') courseId: string
+	) {
+		return this.userService.findProgress(+userId, +courseId)
 	}
 }

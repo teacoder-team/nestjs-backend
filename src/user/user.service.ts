@@ -1,9 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { CourseService } from 'src/course/course.service'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class UserService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly courseService: CourseService
+	) {}
 
 	/**
 	 * Получает список всех пользователей из базы данных.
@@ -68,6 +72,35 @@ export class UserService {
 		return this.prisma.user.findUnique({
 			where: { email }
 		})
+	}
+
+	async findProgress(userId: number, courseId: number) {
+		await this.courseService.findById(courseId)
+
+		const publishedChapters = await this.prisma.chapter.findMany({
+			where: {
+				courseId,
+				isPublished: true
+			},
+			orderBy: { position: 'asc' }
+		})
+
+		const publishedChapterIds = publishedChapters.map(chapter => chapter.id)
+
+		if (publishedChapterIds.length === 0) return 0
+
+		const validCompletedChapters = await this.prisma.logCourse.count({
+			where: {
+				userId,
+				chapterId: { in: publishedChapterIds },
+				isCompleted: true
+			}
+		})
+
+		const progressPercentage =
+			(validCompletedChapters / publishedChapterIds.length) * 100
+
+		return progressPercentage
 	}
 
 	/**

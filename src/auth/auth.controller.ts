@@ -123,7 +123,7 @@ export class AuthController {
 	/**
 	 * Обрабатывает запрос на аутентификацию через Yandex.
 	 * Использует YandexAuthGuard для проверки аутентификации пользователя.
-	 * @param req - Объект запроса, содержащий информацию о пользователе
+	 * @param _req - Объект запроса, содержащий информацию о пользователе
 	 */
 	@ApiOperation({ summary: 'Yandex authentication' })
 	@ApiOkResponse({
@@ -131,7 +131,7 @@ export class AuthController {
 	})
 	@Get('yandex')
 	@UseGuards(YandexAuthGuard)
-	async yandexAuth(@Req() req) {}
+	async yandexAuth(@Req() _req) {}
 
 	/**
 	 * Обрабатывает обратный вызов после аутентификации через Yandex.
