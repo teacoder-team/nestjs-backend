@@ -43,3 +43,4 @@ lerna-debug.log*
 
 # development files and folders
 todo.txt
+/uploads
